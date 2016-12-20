@@ -1,5 +1,56 @@
 "use strict";
+
+var main = {
+    init:function(){
+        this.initListener();
+    },
+    _api:function(url,data,callback){
+        $.ajax({
+            url:url,
+            data:JSON.stringify(data),
+            contentType:"application/json; charset=UTF-8",
+            type : 'POST',
+            dataType : 'json',
+            timeout : 3e4,
+            success:function(res){
+                if(callback){
+                    callback(res);
+                }
+            }
+        });
+    },
+    beginOp:function(){
+        var shareCode = $("#shareCode").val();
+        var waveSwing = $("#waveSwing").val();
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();
+        var initMoney = $("#initMoney").val();
+        var data = {
+            shareCode:shareCode,
+            waveSwing:waveSwing,
+            startDate:startDate,
+            endDate:endDate,
+            initMoney:initMoney
+        };
+        var url="";
+        this._api(url,data,function(res){
+            //显示执行结果
+        });
+    },
+    initListener:function(){
+        var _this = this;
+        $("#waveBtn").on(function(){
+            _this.beginOp();
+        });
+    }
+};
+
+
 $(document).ready(function(){
+    main.init();
+
+
+
     var flow=[];
     for(var i=0;i<25;i++){
         flow.push(Math.floor(Math.random()*(10+((i%16)*5)))+10);
