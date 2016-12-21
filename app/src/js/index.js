@@ -8,11 +8,14 @@ var main = {
         $.ajax({
             url:url,
             data:JSON.stringify(data),
-            contentType:"application/json; charset=UTF-8",
+            contentType:"application/json;charset=UTF-8",
             type : 'POST',
             dataType : 'json',
             timeout : 3e4,
             success:function(res){
+                if(typeof res == "string"){
+                    res = JSON.parse(res);
+                }
                 if(callback){
                     callback(res);
                 }
@@ -32,14 +35,15 @@ var main = {
             endDate:endDate,
             initMoney:initMoney
         };
-        var url="";
+        var url="/shares/littleWave/waveBegin";
         this._api(url,data,function(res){
             //显示执行结果
+            console.log(res);
         });
     },
     initListener:function(){
         var _this = this;
-        $("#waveBtn").on(function(){
+        $("#waveBtn").on("click",function(){
             _this.beginOp();
         });
     }
