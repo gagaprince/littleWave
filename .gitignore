@@ -46,4 +46,4 @@ dist_webpack/
 h5/src/config/config.js
 
 #conf
-confige/*.js
+confige/conf.js
