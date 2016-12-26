@@ -54,7 +54,20 @@ body{
       }
     }
     .chart-frame{
-      margin:20px 0;
+      .chartlist{
+        border-bottom:1px solid #666;
+      }
+
+      margin:20px 10px;
+      .chart>div{
+        margin:10px !important;
+        width:400px !important;
+        height:200px !important;
+        canvas{
+          display:block;
+          width:100%;
+        }
+      }
     }
   }
 }

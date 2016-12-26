@@ -28,6 +28,7 @@ var main = {
         var startDate = $("#startDate").val();
         var endDate = $("#endDate").val();
         var initMoney = $("#initMoney").val();
+        var initPercent = $("#initPercent").val();
         var waveShareNum = $("#waveShareNum").val();
         var data = {
             shareCode:shareCode,
@@ -35,6 +36,7 @@ var main = {
             startDate:startDate,
             endDate:endDate,
             initMoney:initMoney,
+            initPercent:initPercent,
             waveShareNum:waveShareNum
         };
         var url="/shares/littleWave/waveBegin";
@@ -42,9 +44,32 @@ var main = {
         this._api(url,data,function(res){
             //显示执行结果
             console.log(res);
-            _this.renderAllMoneyChart(data,res);
-            _this.renderPriceChart(data,res);
+            _this.renderResult(data,res);
         });
+    },
+    renderResult:function(data,res){
+        var shareCode = data.shareCode;
+        var codes = shareCode.split(",");
+        $("#chartFrame").html("");
+        for(var i=0;i<codes.length;i++){
+            var code = codes[i];
+            this.appendChartItem(code);
+            var resData = res[code];
+            console.log(resData);
+            if(resData){
+                data["code"]=code;
+                this.renderAllMoneyChart(data,resData);
+                this.renderPriceChart(data,resData);
+            }
+        }
+    },
+    appendChartItem:function(code){
+        $("#chartFrame").append(['<div class="chartlist h-c">',
+            '                <div id="waveChart_'+code+'" class="chart">',
+            '                </div>',
+            '                <div id="wavePriceChart_'+code+'" class="chart">',
+            '                </div>',
+            '            </div>'].join(""));
     },
     initListener:function(){
         var _this = this;
@@ -71,7 +96,7 @@ var main = {
         }
     },
     renderAllMoneyChart:function(options,waveData){
-        var bigTitle = options.shareCode+"代码"+options.startDate+"到"+options.endDate+"资金波动";
+        var bigTitle = options.code+"代码"+options.startDate+"到"+options.endDate+"资金波动";
 
         var flow=[];
         var initMoneyFlow = [];
@@ -106,7 +131,7 @@ var main = {
         ];
 
         var chart = new iChart.LineBasic2D({
-            render : 'waveChart',
+            render : 'waveChart_'+options.code,
             data: data,
             align:'center',
             title : {
@@ -215,7 +240,7 @@ var main = {
         chart.draw();
     },
     renderPriceChart:function(options,waveData){
-        var bigTitle = options.shareCode+"代码"+options.startDate+"到"+options.endDate+"价格波动";
+        var bigTitle = options.code+"代码"+options.startDate+"到"+options.endDate+"价格波动";
 
         var sharePrice=[];
         var cbPrice = [];
@@ -247,7 +272,7 @@ var main = {
         ];
 
         var chart = new iChart.LineBasic2D({
-            render : 'wavePriceChart',
+            render : 'wavePriceChart_'+options.code,
             data: data,
             align:'center',
             title : {
