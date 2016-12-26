@@ -85,6 +85,7 @@ var main = {
         }
 
         var mObj = this._findMinMax(flow);
+        console.log(flow);
         console.log(mObj);
         console.log(Math.floor(mObj.min))
 
